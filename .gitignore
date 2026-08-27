@@ -1,0 +1,36 @@
+# macOS metadata
+.DS_Store
+
+# Python caches and virtual environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Local runtime data
+*.db
+*.sqlite
+*.sqlite3
+*.log
+.coverage
+htmlcov/
+backups/
+
+# Editor settings
+.idea/
+.vscode/
+
+# Temporary Office files
+.~*
+~$*
+
+# Local generated share packages unrelated to the application source
+.trae-html-share-packages/

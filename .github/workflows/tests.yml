@@ -1,0 +1,27 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.11"
+      - name: Install locked dependencies
+        run: uv sync --frozen --extra dev
+      - name: Check for undefined Python names
+        run: uv run ruff check --select F821,F822,F823 backend tests scripts
+      - name: Run API and operations tests
+        env:
+          SECRET_KEY: ci-only-secret-key-with-more-than-thirty-two-characters
+        run: uv run pytest
+      - name: Check public package contents
+        run: uv run python scripts/check_public_package.py

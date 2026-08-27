@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能停车场管理系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Toast 通知容器 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- 遮罩层 -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- ========== 登录页面 ========== -->
+    <div class="login-page" id="loginPage">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">🚗</div>
+                <h1>智能停车场管理系统</h1>
+                <p>请登录以管理系统</p>
+            </div>
+            <form id="loginForm" onsubmit="return handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" placeholder="请输入用户名" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" placeholder="请输入密码" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">登 录</button>
+            </form>
+            <div class="login-hint">
+                💡 管理员账号与密码由数据库初始化脚本设置
+            </div>
+            <div id="loginError" class="alert alert-danger" style="display:none; margin-top:16px;"></div>
+        </div>
+    </div>
+
+    <!-- ========== 主应用 ========== -->
+    <div class="app-container" id="appContainer">
+        <!-- 侧边栏 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-icon">🚗</div>
+                <div class="sidebar-brand-text">
+                    智能停车场
+                    <small>上海实际使用基础版 · 开放复用</small>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-page="dashboard" onclick="switchPage('dashboard')">
+                    <span class="nav-icon">📊</span> 数据看板
+                </button>
+                <button class="nav-item" data-page="spots" onclick="switchPage('spots')">
+                    <span class="nav-icon">🚗</span> 车位管理
+                </button>
+                <button class="nav-item" data-page="users" onclick="switchPage('users')">
+                    <span class="nav-icon">👥</span> 用户管理
+                </button>
+                <button class="nav-item" data-page="records" onclick="switchPage('records')">
+                    <span class="nav-icon">📝</span> 停车记录
+                </button>
+                <button class="nav-item" data-page="reservations" onclick="switchPage('reservations')">
+                    <span class="nav-icon">📅</span> 预约管理
+                </button>
+                <button class="nav-item" data-page="ai" onclick="switchPage('ai')">
+                    <span class="nav-icon">🧭</span> 规则调度
+                </button>
+                <button class="nav-item" data-page="config" onclick="switchPage('config')">
+                    <span class="nav-icon">⚙️</span> 系统配置
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div class="user-name" id="userName">管理员</div>
+                </div>
+                <button class="btn btn-danger btn-sm btn-block" onclick="handleLogout()">🚪 退出登录</button>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 移动端菜单按钮 -->
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+
+            <!-- ===== 数据看板 ===== -->
+            <section class="page-section active" id="page-dashboard">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">📊 数据看板</h1>
+                        <p class="page-subtitle">实时停车场运营数据概览</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="refreshDashboard()">🔄 刷新数据</button>
+                </div>
+                <div class="stats-grid" id="dashboardStats">
+                    <!-- 动态由 JS 生成 -->
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3 class="chart-card-title">车位占用情况</h3>
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3 class="chart-card-title">用户信誉积分分布</h3>
+                        <canvas id="histogramChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">最新停车记录</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container" id="recentRecords">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📋</div>
+                                <div class="empty-state-text">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== 车位管理 ===== -->
+            <section class="page-section" id="page-spots">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">🚗 车位管理</h1>
+                        <p class="page-subtitle">管理停车场所有车位信息</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="refreshSpots()">🔄 刷新车位</button>
+                </div>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">➕ 添加新车位</span>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="spotNumber">车位号</label>
+                                    <input type="text" id="spotNumber" placeholder="例如: A-001">
+                                </div>
+                                <div class="form-group">
+                                    <label for="spotFloor">楼层</label>
+                                    <input type="number" id="spotFloor" value="1" min="1" max="10">
+                                </div>
+                                <div class="form-group">
+                                    <label for="spotZone">区域</label>
+                                    <input type="text" id="spotZone" value="A">
+                                </div>
+                                <div class="form-group">
+                                    <label for="spotSize">车位尺寸</label>
+                                    <select id="spotSize">
+                                        <option value="SMALL">小型</option>
+                                        <option value="MEDIUM" selected>中型</option>
+                                        <option value="LARGE">大型</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="display:flex; align-items:center; gap:8px; padding-top:24px;">
+                                    <input type="checkbox" id="spotSpecial" style="width:auto;">
+                                    <label for="spotSpecial" style="margin:0;">特殊需求车位</label>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-success" onclick="addParkingSpot()">添加车位</button>
+                            </div>
+                            <div id="addSpotResult" class="info-display" style="margin-top:12px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">车位列表</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container" id="spotsTable">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">🅿️</div>
+                                <div class="empty-state-text">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== 用户管理 ===== -->
+            <section class="page-section" id="page-users">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">👥 用户管理</h1>
+                        <p class="page-subtitle">管理停车场注册用户信息</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="refreshUsers()">🔄 刷新用户</button>
+                </div>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">➕ 添加新用户</span>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="newUsername">用户名</label>
+                                    <input type="text" id="newUsername" placeholder="用户名">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPhone">手机号</label>
+                                    <input type="text" id="newPhone" placeholder="手机号">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newLicensePlate">车牌号</label>
+                                    <input type="text" id="newLicensePlate" placeholder="例如: 京A12345">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newVehicleSize">车辆尺寸</label>
+                                    <select id="newVehicleSize">
+                                        <option value="SMALL">小型</option>
+                                        <option value="MEDIUM" selected>中型</option>
+                                        <option value="LARGE">大型</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="display:flex; align-items:center; gap:8px; padding-top:24px;">
+                                    <input type="checkbox" id="newUserSpecial" style="width:auto;">
+                                    <label for="newUserSpecial" style="margin:0;">特殊需求用户</label>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-success" onclick="addUser()">添加用户</button>
+                            </div>
+                            <div id="addUserResult" class="info-display" style="margin-top:12px;"></div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">🔍 车辆定位</span>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="search-bar" style="margin-bottom:0;">
+                                <div class="form-group" style="margin:0; flex:1;">
+                                    <input type="text" id="searchLicensePlate" placeholder="输入车牌号查找车辆">
+                                </div>
+                                <button class="btn btn-primary" onclick="findVehicle()">查找</button>
+                            </div>
+                            <div id="searchVehicleResult" class="info-display" style="margin-top:8px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">用户列表</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container" id="usersTable">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">👤</div>
+                                <div class="empty-state-text">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== 停车记录 ===== -->
+            <section class="page-section" id="page-records">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">📝 停车记录</h1>
+                        <p class="page-subtitle">查看所有停车记录和管理车辆进出</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="refreshRecords()">🔄 刷新记录</button>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">当前在停车辆</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container" id="activeRecordsTable">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">🚙</div>
+                                <div class="empty-state-text">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">🚗 车辆离场</span>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="search-bar" style="margin-bottom:0;">
+                                <div class="form-group" style="margin:0; flex:1;">
+                                    <label for="exitRecordId">输入停车记录ID</label>
+                                    <input type="number" id="exitRecordId" placeholder="记录ID" min="1">
+                                </div>
+                                <button class="btn btn-primary" onclick="vehicleExit()" style="margin-top:24px;">办理离场</button>
+                            </div>
+                            <div id="exitResult" class="info-display" style="margin-top:8px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">所有停车记录</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container" id="allRecordsTable">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📋</div>
+                                <div class="empty-state-text">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== 预约管理 ===== -->
+            <section class="page-section" id="page-reservations">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">📅 预约管理</h1>
+                        <p class="page-subtitle">管理车位预约和秒杀活动</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="refreshReservations()">🔄 刷新预约</button>
+                </div>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">📝 创建预约</span>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="resUserId">用户ID</label>
+                                    <input type="number" id="resUserId" placeholder="用户ID" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="resSpotId">车位ID</label>
+                                    <input type="number" id="resSpotId" placeholder="车位ID" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="resStartTime">开始时间</label>
+                                    <input type="datetime-local" id="resStartTime">
+                                </div>
+                                <div class="form-group">
+                                    <label for="resEndTime">结束时间</label>
+                                    <input type="datetime-local" id="resEndTime">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-success" onclick="createReservation()">创建预约</button>
+                            </div>
+                            <div id="createResResult" class="info-display" style="margin-top:12px;"></div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">🔥 秒杀预约</span>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div id="flashSaleInfo" class="flash-sale-highlight">
+                                <div>🔥 秒杀信息</div>
+                                <div class="flash-count" id="flashCount">加载中...</div>
+                            </div>
+                            <div class="search-bar" style="margin-bottom:0;">
+                                <div class="form-group" style="margin:0; flex:1;">
+                                    <label for="flashUserId">输入用户ID参与秒杀</label>
+                                    <input type="number" id="flashUserId" placeholder="用户ID" min="1">
+                                </div>
+                                <button class="btn btn-warning" onclick="participateFlashSale()" style="margin-top:24px;">🔥 参与秒杀</button>
+                            </div>
+                            <div id="flashResult" class="info-display" style="margin-top:8px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">所有预约</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container" id="reservationsTable">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📅</div>
+                                <div class="empty-state-text">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== 规则调度 ===== -->
+            <section class="page-section" id="page-ai">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">🧭 规则调度</h1>
+                        <p class="page-subtitle">确定性历史基线、长时提醒和可解释车位分配</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="refreshAI()">🔄 刷新规则数据</button>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🔔 长时停车监控</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="violationsInfo" class="info-display">加载中...</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📈 流量预测</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container" id="predictionsTable">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📊</div>
+                                <div class="empty-state-text">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">📈 生成流量预测</span>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="search-bar" style="margin-bottom:0;">
+                                <div class="form-group" style="margin:0; flex:1;">
+                                    <label for="daysAhead">预测天数</label>
+                                    <input type="number" id="daysAhead" value="7" min="1" max="30">
+                                </div>
+                                <button class="btn btn-primary" onclick="generatePredictions()" style="margin-top:24px;">生成流量预测</button>
+                            </div>
+                            <div id="genPredResult" class="info-display" style="margin-top:8px;"></div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">📊 容量扩容检查</span>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <button class="btn btn-primary" onclick="checkCapacity()">检查容量</button>
+                            <div id="capacityResult" class="info-display" style="margin-top:12px;"></div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">🧠 智能车位分配</span>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="search-bar" style="margin-bottom:0;">
+                                <div class="form-group" style="margin:0; flex:1;">
+                                    <label for="assignUserId">输入用户ID进行智能分配</label>
+                                    <input type="number" id="assignUserId" placeholder="用户ID" min="1">
+                                </div>
+                                <button class="btn btn-primary" onclick="smartAssign()" style="margin-top:24px;">智能分配</button>
+                            </div>
+                            <div id="assignResult" class="info-display" style="margin-top:8px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== 系统配置 ===== -->
+            <section class="page-section" id="page-config">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">⚙️ 系统配置</h1>
+                        <p class="page-subtitle">管理系统阈值和规则参数</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="refreshConfigs()">🔄 刷新配置</button>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">系统配置列表</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container" id="configsTable">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">⚙️</div>
+                                <div class="empty-state-text">加载中...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">✏️ 更新配置</span>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="configKey">选择配置</label>
+                                    <select id="configKey">
+                                        <option value="long_term_threshold">长时停车阈值天数</option>
+                                        <option value="compliance_bonus">履约奖励积分</option>
+                                        <option value="violation_penalty">违规扣分</option>
+                                        <option value="no_show_penalty">预约失约扣分</option>
+                                        <option value="flash_sale_duration">秒杀预约时长（分钟）</option>
+                                        <option value="expansion_threshold">扩容阈值（占用率）</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="configValue">新值</label>
+                                    <input type="text" id="configValue" placeholder="输入新值">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" onclick="updateConfig()">更新配置</button>
+                            </div>
+                            <div id="updateConfigResult" class="info-display" style="margin-top:12px;"></div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">🔄 初始化默认配置</span>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <button class="btn btn-secondary" onclick="initConfigs()">初始化默认配置</button>
+                            <div id="initConfigResult" class="info-display" style="margin-top:12px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
