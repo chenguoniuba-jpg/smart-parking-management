@@ -1,8 +1,10 @@
 # 智能停车管理系统
 
-[在线英文项目页](https://chenguoniuba-jpg.github.io/smart-parking-management/) · [v1.0.0 Release](https://github.com/chenguoniuba-jpg/smart-parking-management/releases/tag/v1.0.0) · [English](README.md) · [英文案例页](project-intro/README.md) · [复用与运维指南](REUSE.md)
+[在线英文项目页](https://chenguoniuba-jpg.github.io/smart-parking-management/) · [一分钟操作视频](https://chenguoniuba-jpg.github.io/smart-parking-management/project-intro.html#walkthrough) · [v1.0.0 Release](https://github.com/chenguoniuba-jpg/smart-parking-management/releases/tag/v1.0.0) · [English](README.md) · [英文案例页](project-intro/README.md) · [复用与运维指南](REUSE.md)
 
 > **两分钟项目入口：** [打开在线英文项目页 →](https://chenguoniuba-jpg.github.io/smart-parking-management/)
+
+> **一分钟真实程序操作视频：** [在项目页中观看](https://chenguoniuba-jpg.github.io/smart-parking-management/project-intro.html#walkthrough)，或[直接打开 MP4](project-intro/assets/smart-parking-public-build-demo-60s.mp4)。视频录制自实际运行的公开版程序，使用隔离的公开示例数据库，不包含银行 Logo、现场身份、真实车牌或生产账号。
 
 一个使用 FastAPI、SQLAlchemy、SQLite 和原生 JavaScript 构建的智能停车管理系统。系统于 2026 年 3 月在上海一处企业园区停车场开始实际使用，投入使用后继续迭代；当前仓库是 2026 年 8 月整理的公开复用版本。
 
@@ -23,6 +25,8 @@
 ![标注为公开示例数据的系统看板](images/dashboard.png)
 
 图中的看板为**公开示例数据**：286 个车位对应已确认的现场规模，其他计数和比例用于展示界面，不作为上海现场实时运营统计发布。
+
+一分钟视频依次展示登录、286 车位看板、车位列表、示例车辆查询、预约创建、规则流量基线、容量检查和系统配置。操作过程来自实际运行的公开版程序，视频中的业务记录均为公开示例记录。
 
 ## What it demonstrates
 

@@ -1,6 +1,6 @@
 # Smart Parking Management System — English Case Study
 
-[Live project page](https://chenguoniuba-jpg.github.io/smart-parking-management/) · [Back to the repository home](../README.md) · [Maintainer role](../MAINTAINER_ROLE.md) · [Deployment scope](../DEPLOYMENT.md) · [Standalone HTML source](project-intro.html)
+[Live project page](https://chenguoniuba-jpg.github.io/smart-parking-management/) · [60-second walkthrough](https://chenguoniuba-jpg.github.io/smart-parking-management/project-intro.html#walkthrough) · [Back to the repository home](../README.md) · [Maintainer role](../MAINTAINER_ROLE.md) · [Deployment scope](../DEPLOYMENT.md) · [Standalone HTML source](project-intro.html)
 
 ## At a glance
 
@@ -12,6 +12,10 @@
 | Iteration | Continued after launch; August v7 builds on the July v6 baseline |
 | Public/on-site code relationship | Current public and current on-site application source match as of this snapshot |
 | Verification boundary | The park management office can confirm use; private identities, credentials, and live records are excluded |
+
+## One-minute walkthrough
+
+[Watch the real system interaction video](https://chenguoniuba-jpg.github.io/smart-parking-management/project-intro.html#walkthrough) or [open the MP4 directly](assets/smart-parking-public-build-demo-60s.mp4). It records the running public application with an isolated sample database and demonstrates login, dashboard, space and vehicle lookup, reservation creation, deterministic traffic baselines, capacity checks, and configuration. No bank logo, site identity, live plate, customer record, or production credential is shown.
 
 ## The problem
 

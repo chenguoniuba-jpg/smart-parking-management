@@ -1,8 +1,10 @@
 # Smart Parking Management System
 
-[Live project page](https://chenguoniuba-jpg.github.io/smart-parking-management/) · [v1.0.0 release](https://github.com/chenguoniuba-jpg/smart-parking-management/releases/tag/v1.0.0) · [English case study](project-intro/README.md) · [Chinese version](README_ZH.md) · [Reuse guide](REUSE.md)
+[Live project page](https://chenguoniuba-jpg.github.io/smart-parking-management/) · [60-second walkthrough](https://chenguoniuba-jpg.github.io/smart-parking-management/project-intro.html#walkthrough) · [v1.0.0 release](https://github.com/chenguoniuba-jpg/smart-parking-management/releases/tag/v1.0.0) · [English case study](project-intro/README.md) · [Chinese version](README_ZH.md) · [Reuse guide](REUSE.md)
 
 > **Two-minute project tour:** [Open the live English project page →](https://chenguoniuba-jpg.github.io/smart-parking-management/)
+
+> **One-minute real interaction video:** [Watch in the project page](https://chenguoniuba-jpg.github.io/smart-parking-management/project-intro.html#walkthrough) or [open the MP4](project-intro/assets/smart-parking-public-build-demo-60s.mp4). The recording uses the running public application with an isolated sample database; it contains no bank logo, site identity, live plate, or production credential.
 
 A FastAPI, SQLAlchemy, SQLite, and vanilla JavaScript parking-management system. Operational use began in March 2026 at a corporate industrial park parking facility in Shanghai. The running system was then iterated through later 2026 releases; this repository is the current August public-reuse snapshot.
 
@@ -32,6 +34,8 @@ Development of the operating system predates this Git repository. Git was introd
 ![Dashboard marked as public sample data](images/dashboard.png)
 
 The dashboard screenshot is **public sample data**. Its interface and 286-space capacity illustrate the reusable package; other displayed counts and percentages are not presented as live Shanghai operational statistics.
+
+The 60-second walkthrough records real interactions with the public build: masked login, dashboard review, space and sample-vehicle lookup, reservation creation, deterministic traffic-baseline generation, capacity checks, and configuration review. All displayed records are public sample records.
 
 ## What the repository contains
 

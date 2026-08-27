@@ -154,6 +154,39 @@
       position: relative;
       z-index: 1;
     }
+    .video-frame {
+      background: #0f172a;
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+      margin: 1.5rem 0;
+      overflow: hidden;
+    }
+    .walkthrough-video {
+      aspect-ratio: 16 / 9;
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+    .walkthrough-notes {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 1.25rem;
+    }
+    .walkthrough-note {
+      background: #f8fafc;
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 0.85rem 1rem;
+    }
+    .walkthrough-note strong {
+      color: var(--ink);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
     .hero-stats {
       display: flex;
       flex-wrap: wrap;
@@ -520,6 +553,7 @@
       h2 { font-size: 1.3rem; }
       .philosophy { padding: 1.75rem; }
       .philosophy-quote { font-size: 1.2rem; }
+      .walkthrough-notes { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -557,6 +591,23 @@
     </header>
 
     <main>
+
+      <!-- ========== 60-SECOND WALKTHROUGH ========== -->
+      <section id="walkthrough">
+        <h2><span class="section-num">00 / Walkthrough</span>60-Second Real System Walkthrough</h2>
+        <p class="lead">This recording shows actual interactions with the running public build: administrator login, the 286-space dashboard, space and vehicle lookup, reservation creation, rule-based traffic baselines, capacity prompts, and configuration.</p>
+        <div class="video-frame">
+          <video class="walkthrough-video" controls preload="metadata" playsinline poster="assets/smart-parking-demo-poster.jpg" aria-label="One-minute walkthrough of the running public smart parking management system">
+            <source src="assets/smart-parking-public-build-demo-60s.mp4" type="video/mp4">
+            Your browser cannot play this video. <a href="assets/smart-parking-public-build-demo-60s.mp4">Download the MP4 walkthrough</a>.
+          </video>
+        </div>
+        <div class="walkthrough-notes">
+          <div class="walkthrough-note"><strong>Actual running interface</strong>Recorded from the repository's public application, not a redrawn mockup.</div>
+          <div class="walkthrough-note"><strong>Isolated sample database</strong>DEMO identifiers replace customer, vehicle, and production records.</div>
+          <div class="walkthrough-note"><strong>Safe public boundary</strong>No bank name, logo, site identity, live plate, or production credential is shown.</div>
+        </div>
+      </section>
 
       <!-- ========== SECTION 1: THE CHALLENGE ========== -->
       <section>
