@@ -1,12 +1,21 @@
 # Smart Parking Management System
 
-[Chinese version](README_ZH.md) · [English case study](project-intro/README.md) · [Maintainer role](MAINTAINER_ROLE.md) · [Deployment statement](DEPLOYMENT.md) · [Reuse guide](REUSE.md)
+[Live project page](https://chenguoniuba-jpg.github.io/smart-parking-management/) · [v1.0.0 release](https://github.com/chenguoniuba-jpg/smart-parking-management/releases/tag/v1.0.0) · [English case study](project-intro/README.md) · [Chinese version](README_ZH.md) · [Reuse guide](REUSE.md)
 
-> **Start with the visual project story:** [Read the English case study →](project-intro/README.md)
->
-> The repository also contains a standalone HTML presentation prepared for GitHub Pages. Its live URL can be added here after the public repository is created and Pages is enabled.
+> **Two-minute project tour:** [Open the live English project page →](https://chenguoniuba-jpg.github.io/smart-parking-management/)
 
 A FastAPI, SQLAlchemy, SQLite, and vanilla JavaScript parking-management system. Operational use began in March 2026 at a corporate industrial park parking facility in Shanghai. The running system was then iterated through later 2026 releases; this repository is the current August public-reuse snapshot.
+
+## At a glance
+
+| Reviewer question | Short answer |
+|---|---|
+| What problem does it address? | Daily administration of long-duration occupancy, reservations, space assignment, peak-hour baselines, and operator follow-up in an industrial-park parking facility. |
+| What was built? | An authenticated FastAPI/SQLAlchemy backend, browser administration interface, explainable scheduling rules, automated tests, and reusable deployment tooling. |
+| Where is it used? | The maintainer states that operational use began in March 2026 at a Shanghai corporate industrial park with 3 administrators and 286 managed spaces. |
+| What changed because of the work? | The delivered scope brings user, space, parking-record, reservation, assignment, and reporting workflows into one application. The public package does not claim a quantified efficiency gain because no authorized before-and-after operational dataset is published. |
+| What is the documented maintainer role? | Product direction, operational-scope confirmation, privacy and evidence boundaries, July-to-August iteration continuity, claims review, and public-release stewardship. [Details →](MAINTAINER_ROLE.md) |
+| How can it be reviewed or reused? | View the [live project page](https://chenguoniuba-jpg.github.io/smart-parking-management/), inspect the [v1.0.0 release](https://github.com/chenguoniuba-jpg/smart-parking-management/releases/tag/v1.0.0), or follow the quick start below. |
 
 ## Repository history and release provenance
 
@@ -108,7 +117,7 @@ The script uses SQLite's backup API and validates the resulting file. Copy backu
 
 ## GitHub Pages
 
-Visitors can enter the project story directly from this README through the [English case study](project-intro/README.md). The standalone HTML presentation is [`project-intro/project-intro.html`](project-intro/project-intro.html). The included Pages workflow publishes the `project-intro/` directory after Pages is configured to use **GitHub Actions** in the repository settings. The deployment URL will appear in the workflow's `github-pages` environment and should then replace this setup note with a direct live link.
+The live English project page is available at <https://chenguoniuba-jpg.github.io/smart-parking-management/>. Its source is [`project-intro/project-intro.html`](project-intro/project-intro.html), and [`.github/workflows/pages.yml`](.github/workflows/pages.yml) publishes the `project-intro/` directory through GitHub Actions.
 
 ## Interpreting the “smart” features
 

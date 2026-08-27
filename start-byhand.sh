@@ -2,8 +2,8 @@
 
 ## 1. Download the repository
 
-## 2. enter ai-parking directory
-cd ai-parking/
+## 2. Enter the cloned repository directory
+cd smart-parking-management/
 
 ## 3. install python (from offical website)
 

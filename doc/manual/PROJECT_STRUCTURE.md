@@ -1,7 +1,7 @@
 # 项目结构
 
 ```text
-ai-parking/
+smart-parking-management/
 ├── .github/workflows/
 │   ├── tests.yml                 # 测试与公开包检查
 │   └── pages.yml                 # 英文项目页发布

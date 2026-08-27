@@ -31,7 +31,7 @@ def print_response(response, title):
 
 def test_system():
     print("\n" + "="*60)
-    print("AI智能停车场管理系统 - 功能测试")
+    print("智能停车管理系统 - 功能测试")
     print("="*60)
     
     print("\n1. 测试用户管理")

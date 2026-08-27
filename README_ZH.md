@@ -1,8 +1,8 @@
-# Smart Parking Management System
+# 智能停车管理系统
 
-[English](README.md) · [英文案例页](project-intro/README.md) · [维护者职责说明](MAINTAINER_ROLE.md) · [复用与运维指南](REUSE.md)
+[在线英文项目页](https://chenguoniuba-jpg.github.io/smart-parking-management/) · [v1.0.0 Release](https://github.com/chenguoniuba-jpg/smart-parking-management/releases/tag/v1.0.0) · [English](README.md) · [英文案例页](project-intro/README.md) · [复用与运维指南](REUSE.md)
 
-> **建议入口：** [从 README 进入英文项目案例页 →](project-intro/README.md)
+> **两分钟项目入口：** [打开在线英文项目页 →](https://chenguoniuba-jpg.github.io/smart-parking-management/)
 
 一个使用 FastAPI、SQLAlchemy、SQLite 和原生 JavaScript 构建的智能停车管理系统。系统于 2026 年 3 月在上海一处企业园区停车场开始实际使用，投入使用后继续迭代；当前仓库是 2026 年 8 月整理的公开复用版本。
 

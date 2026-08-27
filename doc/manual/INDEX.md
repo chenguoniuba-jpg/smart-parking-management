@@ -18,7 +18,7 @@
 
 ## 历史设计材料
 
-- [早期功能需求设计文档](AI-parkinglot-prompt.md)
+- [早期功能需求设计文档](smart-parking-requirements.md)
 - [早期 v1.1.0 说明](UPDATE_v1.1.0.md)
 - `../product_mgt/` 中的七份 Word 设计文件（最新为 `v7-20260825`，在 7 月 v6 基础上整理）
 

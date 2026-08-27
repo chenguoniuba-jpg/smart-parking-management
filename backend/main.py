@@ -15,7 +15,7 @@ async def lifespan(_: FastAPI):
     yield
 
 app = FastAPI(
-    title="AI智能停车场管理系统",
+    title="智能停车管理系统",
     description="规则驱动的智能停车管理系统（上海实际使用基础上的开放复用版）",
     version="1.0.0",
     lifespan=lifespan,

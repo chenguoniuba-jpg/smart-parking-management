@@ -1,6 +1,6 @@
 # Smart Parking Management System — English Case Study
 
-[Back to the repository home](../README.md) · [Maintainer role](../MAINTAINER_ROLE.md) · [Deployment scope](../DEPLOYMENT.md) · [Standalone HTML presentation](project-intro.html)
+[Live project page](https://chenguoniuba-jpg.github.io/smart-parking-management/) · [Back to the repository home](../README.md) · [Maintainer role](../MAINTAINER_ROLE.md) · [Deployment scope](../DEPLOYMENT.md) · [Standalone HTML source](project-intro.html)
 
 ## At a glance
 
@@ -47,9 +47,10 @@ The 286-space capacity is a maintainer-confirmed site fact. The public dashboard
 
 ## Explore
 
+- [Open the live project page](https://chenguoniuba-jpg.github.io/smart-parking-management/)
 - [Run and reuse the system](../REUSE.md)
 - [Review evidence and limitations](../EVIDENCE_AND_LIMITATIONS.md)
 - [Read the public release note](../PUBLIC_RELEASE.md)
 - [Open the standalone visual presentation](project-intro.html)
 
-After the repository is uploaded and GitHub Pages is enabled, the standalone presentation can be published by the included `Deploy project page` workflow.
+The standalone presentation is published through the repository's `Deploy project page` workflow and is currently available at the live project-page URL above.

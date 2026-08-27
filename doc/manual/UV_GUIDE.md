@@ -31,11 +31,11 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-## 在AI停车场项目中使用UV
+## 在智能停车管理系统项目中使用 UV
 
 ### 1. 初始化项目
 ```bash
-cd ai-parking
+cd smart-parking-management
 uv sync
 ```
 
@@ -162,7 +162,7 @@ UV会自动解决大部分依赖冲突。如果仍有问题：
 ```bash
 # 1. 克隆项目
 git clone <repo>
-cd ai-parking
+cd smart-parking-management
 
 # 2. 安装依赖
 uv sync
@@ -182,7 +182,7 @@ start.bat
 
 ## 性能对比
 
-在AI停车场项目中：
+在智能停车管理系统项目中：
 
 | 操作 | pip | uv | 提升 |
 |------|-----|-----|------|
@@ -208,7 +208,7 @@ start.bat
 
 ## 总结
 
-UV为AI停车场项目提供了：
+UV 为智能停车管理系统项目提供了：
 - ⚡ 更快的依赖安装
 - 🔒 更可靠的依赖管理
 - 🎯 更好的开发体验
