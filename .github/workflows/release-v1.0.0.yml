@@ -1,0 +1,56 @@
+name: Publish v1.0.0 Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/release-v1.0.0.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create v1.0.0 release if missing
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_NOTES: |
+            ## First public release snapshot
+
+            This release publishes the completed smart parking management system as its first public Git snapshot. Development of the operating system predates this repository; the dated January–August design artifacts are retrospective iteration records, not reconstructed or backdated Git commits.
+
+            ### Included
+
+            - FastAPI, SQLAlchemy, and SQLite parking-management backend
+            - Browser administrator interface
+            - JWT authentication and bcrypt password hashing
+            - Explainable rule-based space assignment and deterministic traffic baselines
+            - Long-stay and configurable capacity alerts
+            - Automated tests, dependency lockfile, container packaging, backup tooling, and reuse documentation
+            - English case study and GitHub Pages presentation
+
+            ### Operational and public-data boundary
+
+            The project maintainer confirms that operational use began in March 2026 at a Shanghai corporate industrial park parking facility with 3 administrators and 286 managed spaces. The running system continued to be iterated after launch. As of this public snapshot, the current public application source and the current on-site application source match; this does not mean the August snapshot existed unchanged in March.
+
+            The company name, exact site address, credentials, personal information, live database, and original operational records are not included in the public repository.
+
+            - Project page: https://chenguoniuba-jpg.github.io/smart-parking-management/
+            - Scope and provenance: `PUBLIC_RELEASE.md`
+            - Deployment statement: `DEPLOYMENT.md`
+            - Evidence boundaries: `EVIDENCE_AND_LIMITATIONS.md`
+        run: |
+          if gh release view v1.0.0 >/dev/null 2>&1; then
+            echo "Release v1.0.0 already exists."
+            exit 0
+          fi
+
+          gh release create v1.0.0 \
+            --verify-tag \
+            --title "v1.0.0 — First Public Release Snapshot" \
+            --notes "$RELEASE_NOTES"
